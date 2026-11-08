@@ -3,29 +3,24 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useSyncExternalStore } from "react";
+import { t, type Locale } from "@/config/i18n";
 
 const subscribe = () => () => undefined;
 
-export function ThemeToggle() {
+export function ThemeToggle({ locale }: { locale: Locale }) {
   const { resolvedTheme, setTheme } = useTheme();
   const mounted = useSyncExternalStore(subscribe, () => true, () => false);
-
   const isDark = resolvedTheme === "dark";
-  const label = isDark ? "切换到浅色主题" : "切换到深色主题";
+  const label = mounted
+    ? isDark ? t(locale).themeLight : t(locale).themeDark
+    : t(locale).themeDefault;
 
   return (
-    <button
-      type="button"
-      className="icon-button"
-      aria-label={mounted ? label : "切换颜色主题"}
-      title={mounted ? label : "切换颜色主题"}
+    <button type="button" className="icon-button theme-toggle" aria-label={label} title={label}
       onClick={() => setTheme(isDark ? "light" : "dark")}
     >
-      {mounted ? (
-        isDark ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />
-      ) : (
-        <span className="theme-placeholder" aria-hidden="true" />
-      )}
+      {mounted ? (isDark ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />) :
+        <span className="theme-placeholder" aria-hidden="true" />}
     </button>
   );
 }

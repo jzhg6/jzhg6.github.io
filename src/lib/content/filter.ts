@@ -1,9 +1,5 @@
-import {
-  postCategories,
-  postCategoryKeys,
-  postTypes,
-  postTypeKeys,
-} from "@/config/taxonomy";
+import type { Locale } from "@/config/i18n";
+import { postCategories, postCategoryKeys, postTypes, postTypeKeys } from "@/config/taxonomy";
 import type { PostCategory, PostType } from "@/config/taxonomy";
 import type { PostSearchRecord } from "@/types/post";
 
@@ -74,21 +70,28 @@ export function serializeFilterState(state: FilterState) {
 export function filterPosts(posts: PostSearchRecord[], state: FilterState) {
   const tokens = normalizeSearchText(state.query).split(" ").filter(Boolean);
 
+  function matchesToken(text: string, token: string) {
+    if (/^[a-z0-9]+$/.test(token)) {
+      return new RegExp(`(?:^|[^a-z0-9])${token}(?![a-z0-9])`).test(text);
+    }
+    return text.includes(token);
+  }
+
   return posts.filter((post) => {
     if (state.type && post.type !== state.type) return false;
     if (state.category && post.category !== state.category) return false;
     if (state.year && post.year !== state.year) return false;
     if (state.tags.some((tag) => !post.tags.includes(tag))) return false;
-    return tokens.every((token) => post.searchText.includes(token));
+    return tokens.every((token) => matchesToken(post.searchText, token));
   });
 }
 
-export function describeFilter(state: FilterState) {
+export function describeFilter(state: FilterState, locale: Locale = "zh") {
   const labels: string[] = [];
-  if (state.query) labels.push(`搜索“${state.query}”`);
-  if (state.type) labels.push(postTypes[state.type].label);
-  if (state.category) labels.push(postCategories[state.category]);
+  if (state.query) labels.push(locale === "en" ? `Search: ${state.query}` : `搜索“${state.query}”`);
+  if (state.type) labels.push(postTypes[locale][state.type].label);
+  if (state.category) labels.push(postCategories[locale][state.category]);
   labels.push(...state.tags);
-  if (state.year) labels.push(`${state.year} 年`);
+  if (state.year) labels.push(locale === "en" ? String(state.year) : `${state.year} 年`);
   return labels;
 }

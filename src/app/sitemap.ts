@@ -1,23 +1,35 @@
 import type { MetadataRoute } from "next";
+import { localizedPath, type Locale } from "@/config/i18n";
 import { absoluteUrl } from "@/config/site";
 import { getAllPublishedPosts } from "@/lib/content/posts";
 import { parseDate } from "@/lib/dates";
 
 export const dynamic = "force-static";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = await getAllPublishedPosts();
-  const staticPages: MetadataRoute.Sitemap = [
-    { url: absoluteUrl(), lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
-    { url: absoluteUrl("/posts"), lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
-    { url: absoluteUrl("/about"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
-  ];
-  const postPages: MetadataRoute.Sitemap = posts.map((post) => ({
-    url: absoluteUrl(`/posts/${post.slug}`),
-    lastModified: parseDate(post.updatedAt ?? post.publishedAt),
-    changeFrequency: "monthly",
-    priority: 0.7,
-  }));
+function entry(locale: Locale, path: string, lastModified: Date, priority: number): MetadataRoute.Sitemap[number] {
+  return {
+    url: absoluteUrl(localizedPath(locale, path)), lastModified,
+    changeFrequency: "monthly", priority,
+    alternates: { languages: {
+      en: absoluteUrl(localizedPath("en", path)),
+      "zh-CN": absoluteUrl(localizedPath("zh", path)),
+    } },
+  };
+}
 
-  return [...staticPages, ...postPages];
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const posts = await getAllPublishedPosts("en");
+  const routes = ["/", "/research", "/projects", "/posts", "/about"];
+  const entries: MetadataRoute.Sitemap = [];
+  for (const path of routes) {
+    for (const locale of ["en", "zh"] as const) {
+      entries.push(entry(locale, path, new Date(), path === "/" ? 1 : 0.8));
+    }
+  }
+  for (const post of posts) {
+    for (const locale of ["en", "zh"] as const) {
+      entries.push(entry(locale, `/posts/${post.slug}`, parseDate(post.updatedAt ?? post.publishedAt), 0.7));
+    }
+  }
+  return entries;
 }

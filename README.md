@@ -1,92 +1,54 @@
-# 未命名手记
+# Ziheng Ji — Research, Projects, Blog
 
-一个以“个人工作日志”为核心的静态博客。页面借鉴 Changelog 的时间线信息架构，但使用独立的品牌、配色、排版与交互设计。
-
-## 功能
-
-- 首页、文章归档、文章详情与 About 页面
-- 本地 Markdown 内容管理与严格 frontmatter 校验
-- 中文关键词搜索，以及类型、分类、标签和年份组合筛选
-- 可分享、可通过浏览器前进/后退恢复的筛选 URL
-- light、dark、system 三种主题策略
-- 静态生成、RSS、sitemap、robots、Open Graph 与 JSON-LD
-- 响应式布局、键盘快捷键与 reduced-motion 支持
-- Vitest、Playwright 和 axe 自动化检查
+以英文为首选语言的中英双语个人主页，包含 Research、Projects、Blog 和 Repository 入口。姓名即主页导航；主页展示具身智能研究方向、精选项目和最近写作。Blog 保留原有 Markdown 内容、全文搜索与组合筛选。
 
 ## 本地运行
 
-要求 Node.js 22.23.1 或更高版本。
+需要 Node.js 22.23.1 或更高版本：
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-打开 <http://localhost:3000>。
+英文首页为 <http://localhost:3000/>，中文首页为 <http://localhost:3000/zh/>。点击页头的「中文 / EN」切换语言，文章 slug 保持一致。
 
-## 个性化
+## 内容结构与个性化
 
-个人资料统一位于：
+- [site.ts](src/config/site.ts)：真实姓名、邮箱、GitHub、论文和项目链接；更改链接时核实公开来源。
+- [i18n.ts](src/config/i18n.ts)：英文与中文的页面文案和导航。
+- [taxonomy.ts](src/config/taxonomy.ts)：文章类型及分类的双语名称。
+- `content/posts/<slug>.md`：原有中文正文；`content/posts/en/<slug>.md`：对应的英文译稿。
+- Research 中的 OpenRDMA 论文链接为 arXiv 预印本。XR × Embodied AI 暂为「探索中」卡位，不含未经证实的成果或链接。
+- GitHub 和 Email 链接可点击；Google Scholar、LinkedIn、ORCID 和 X 标签显示待补状态，不提供假链接。
 
-- `src/config/site.ts`：站点名、作者、简介、联系链接和 About 文案
-- `src/config/taxonomy.ts`：文章类型与分类
-- `.env.local`：可选的公开地址覆盖配置，例如：
-
-```bash
-NEXT_PUBLIC_SITE_URL=https://jzhg6.github.io
-```
-
-默认公开地址已设置为 `https://jzhg6.github.io`，GitHub Actions 构建时也会显式指定这一地址。
-
-## 新增文章
-
-在 `content/posts/` 新建 Markdown 文件，文件名必须与 `slug` 一致：
+新增文章时，在两个语言目录里使用相同的 slug、日期、分类、类型和 tags。Frontmatter 示例如下，英文版仅翻译 title、summary 与正文：
 
 ```md
 ---
-title: "文章标题"
-slug: "post-slug"
-publishedAt: "2026-11-02"
-updatedAt: "2026-11-03"
-summary: "用于归档、搜索和社交分享的文章摘要。"
+title: "An English title"
+slug: "my-post"
+publishedAt: "2026-11-09"
+summary: "A summary for archives, search results, and social previews."
 type: "essay"
 category: "engineering"
 tags:
   - TypeScript
-  - Next.js
-featured: false
 draft: false
 ---
 
-正文从二级标题开始。
+## Start with a second-level heading
 ```
 
-公开构建会自动排除 `draft: true` 和发布日期在未来的文章。字段错误、重复 slug、未知 taxonomy 或文件名不一致都会使构建失败，并指出对应文件。
+构建时会校验双语配对，缺少译稿或结构字段不一致会明确报错；`draft: true` 与未来日期文章均不会公开。
 
-## 常用命令
+## 验证与部署
 
 ```bash
-npm run lint          # ESLint
-npm run typecheck     # TypeScript
-npm run test          # Vitest 单元测试
-npm run test:e2e      # Playwright 桌面与移动端验收
-npm run build         # Next.js 生产构建
-npm run check         # lint + typecheck + test + build
+npm run check                         # lint + typecheck + unit tests + static build
+STATIC_EXPORT_TEST=1 npm run test:e2e # 在 out/ 静态产物上运行浏览器验收
 ```
 
-首次运行 E2E 测试时安装 Chromium：
+首次运行浏览器测试前需执行 `npx playwright install chromium`。`npm run build` 会生成可直接托管的 `out/`；`npm run start` 不适用于静态导出。
 
-```bash
-npx playwright install chromium
-```
-
-## 部署
-
-项目采用 Next.js 静态导出，`npm run build` 会在 `out/` 生成 GitHub Pages 可托管的 HTML、CSS、JS、RSS 和图片。`npm run start` 不适用于静态导出；本地预览产物可运行：
-
-```bash
-npm run build
-python3 -m http.server 3000 --directory out
-```
-
-推送到 `jzhg6/jzhg6.github.io` 的 `main` 分支后，GitHub Actions 自动构建并部署到 <https://jzhg6.github.io>。首次配置与故障排查见 [DEPLOYMENT.md](DEPLOYMENT.md)。
+推送 `main` 后 GitHub Actions 自动更新 <https://jzhg6.github.io/>。英文 RSS 为 `/feed.xml`，原有中文 RSS 保留 `/rss.xml`。配置与发布步骤见 [DEPLOYMENT.md](DEPLOYMENT.md)。

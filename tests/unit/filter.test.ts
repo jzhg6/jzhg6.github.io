@@ -52,6 +52,11 @@ describe("文章筛选", () => {
     expect(filterPosts(posts, { ...empty, tags: ["RDMA", "URL"] })).toHaveLength(0);
   });
 
+  it("英文短词不匹配其他单词内部的子串", () => {
+    const onlyBackend = [{ ...posts[0], searchText: "rdma backend transport" }];
+    expect(filterPosts(onlyBackend, { ...empty, query: "RDMA ACK" })).toHaveLength(0);
+  });
+
   it("组合类型、分类和年份", () => {
     const result = filterPosts(posts, {
       ...empty,

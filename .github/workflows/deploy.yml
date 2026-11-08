@@ -31,8 +31,16 @@ jobs:
       - name: 验证 Pages 产物
         run: |
           test -f out/index.html
+          test -f out/zh/index.html
+          test -f out/research/index.html
+          test -f out/zh/research/index.html
+          test -f out/projects/index.html
+          test -f out/zh/projects/index.html
           test -f out/posts/index.html
+          test -f out/zh/posts/index.html
           test -f out/posts/building-a-personal-worklog/index.html
+          test -f out/zh/posts/building-a-personal-worklog/index.html
+          test -f out/feed.xml
           test -f out/rss.xml
           test -f out/sitemap.xml
           test -f out/robots.txt

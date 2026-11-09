@@ -36,18 +36,18 @@ test("语言切换保持页面与文章 slug，正文完整翻译", async ({ pag
 test("两种语言的筛选 URL 均可分享并保持独立搜索", async ({ page }) => {
   await page.goto("/posts/");
   const search = page.getByRole("searchbox", { name: /Search titles/ });
-  await search.fill("RDMA ACK");
-  await expect(page).toHaveURL(/q=RDMA(?:\+|%20)ACK/);
+  await search.fill("PSN");
+  await expect(page).toHaveURL(/q=PSN/);
   await expect(page.getByTestId("post-row")).toHaveCount(1);
   await page.reload();
-  await expect(search).toHaveValue("RDMA ACK");
+  await expect(search).toHaveValue("PSN");
   await page.getByRole("link", { name: "切换到中文" }).click();
-  await expect(page).toHaveURL(/\/zh\/posts\/\?q=RDMA/);
+  await expect(page).toHaveURL(/\/zh\/posts\/\?q=PSN/);
   await expect(page.locator("html")).toHaveAttribute("lang", "zh-CN");
   await expect(page.getByTestId("post-row")).toHaveCount(1);
   await page.getByRole("button", { name: "清除全部" }).click();
   await expect(page).toHaveURL(/\/zh\/posts\/$/);
-  await page.getByRole("searchbox", { name: /搜索文章/ }).fill("重传 PSN");
+  await page.getByRole("searchbox", { name: /搜索文章/ }).fill("PSN 重传");
   await expect(page.getByTestId("post-row")).toHaveCount(1);
 });
 
@@ -60,6 +60,23 @@ test("Research 和 Projects 只展示可核实内容", async ({ page }) => {
   await expect(page.locator("#xr-embodied-ai")).toContainText("in progress");
   await expect(page.locator("#xr-embodied-ai a")).toHaveCount(0);
   await expect(page.getByRole("link", { name: /Source code/ })).toHaveAttribute("href", "https://github.com/jzhg6/GraphicalHDL");
+});
+
+test("OpenRDMA 论文推文在中英文博客中展示且图片可用", async ({ page }) => {
+  await page.goto("/posts/");
+  await expect(page.getByRole("link", { name: /OpenRDMA Paper Release/ })).toBeVisible();
+  await page.goto("/posts/openrdma-paper-release/");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("OpenRDMA Paper Release");
+  const images = page.locator(".prose img");
+  await expect(images).toHaveCount(4);
+  for (const src of await images.evaluateAll((elements) => elements.map((element) => element.getAttribute("src")))) {
+    expect(src).toBeTruthy();
+    expect((await page.request.get(src!)).ok()).toBeTruthy();
+  }
+  await page.getByRole("link", { name: /中文/ }).click();
+  await expect(page).toHaveURL(/\/zh\/posts\/openrdma-paper-release\/$/);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("OpenRDMA 论文发布");
+  await expect(page.locator(".prose img")).toHaveCount(4);
 });
 
 test("主题切换在刷新后保持", async ({ page }) => {

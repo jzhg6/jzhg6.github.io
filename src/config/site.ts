@@ -15,6 +15,7 @@ export const siteConfig = {
     email: "ziheng830@connect.hku.hk",
   },
   github: "https://github.com/jzhg6",
+  openRdmaRepo: "https://github.com/open-rdma/open-rdma",
   paper: "https://arxiv.org/abs/2611.07559",
   graphicalHdl: "https://github.com/jzhg6/GraphicalHDL",
 } as const;

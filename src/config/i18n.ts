@@ -47,6 +47,16 @@ export const ui = {
       graphicalDescription: "A graphical HDL design and RTL compilation prototype that transforms structured JSON into SystemVerilog.",
       paper: "Paper",
       source: "Source code",
+      repository: "Repository",
+    },
+    repositories: {
+      heading: "Repositories",
+      intro: "Public repositories from my GitHub profile.",
+      profile: "View GitHub profile",
+      fork: "Fork",
+      noDescription: "No description provided.",
+      stars: "stars",
+      forks: "forks",
     },
     blog: {
       title: "Blog",
@@ -135,6 +145,16 @@ export const ui = {
       graphicalDescription: "将结构化 JSON 编译为 SystemVerilog 的图形化 HDL 设计与 RTL 编译原型。",
       paper: "论文",
       source: "源码",
+      repository: "仓库",
+    },
+    repositories: {
+      heading: "代码仓库",
+      intro: "我的 GitHub 主页上的公开仓库。",
+      profile: "查看 GitHub 主页",
+      fork: "Fork",
+      noDescription: "暂无描述。",
+      stars: "星标",
+      forks: "复刻",
     },
     blog: {
       title: "博客",

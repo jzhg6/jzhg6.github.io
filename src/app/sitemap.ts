@@ -19,7 +19,7 @@ function entry(locale: Locale, path: string, lastModified: Date, priority: numbe
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getAllPublishedPosts("en");
-  const routes = ["/", "/research", "/projects", "/posts", "/about"];
+  const routes = ["/", "/research", "/projects", "/repositories", "/posts", "/about"];
   const entries: MetadataRoute.Sitemap = [];
   for (const path of routes) {
     for (const locale of ["en", "zh"] as const) {

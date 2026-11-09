@@ -24,10 +24,17 @@ export function ProjectsContent({ locale }: { locale: Locale }) {
           <div className="project-index-icon"><Network aria-hidden="true" /></div>
           <div>
             <span className="project-status">{labels.projects.rdmaStatus}</span>
-            <h2>OpenRDMA</h2>
+            <h2>
+              <a href={siteConfig.openRdmaRepo} target="_blank" rel="noopener noreferrer">
+                OpenRDMA <ArrowUpRight aria-hidden="true" />
+              </a>
+            </h2>
             <p>{labels.projects.rdmaDescription}</p>
             <span className="project-keywords">RDMA · FPGA · Networking</span>
             <div className="project-actions">
+              <a href={siteConfig.openRdmaRepo} target="_blank" rel="noopener noreferrer">
+                {labels.projects.repository} <ArrowUpRight aria-hidden="true" />
+              </a>
               <a href={siteConfig.paper} target="_blank" rel="noopener noreferrer">
                 {labels.projects.paper} <ArrowUpRight aria-hidden="true" />
               </a>

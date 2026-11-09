@@ -36,6 +36,8 @@ jobs:
           test -f out/zh/research/index.html
           test -f out/projects/index.html
           test -f out/zh/projects/index.html
+          test -f out/repositories/index.html
+          test -f out/zh/repositories/index.html
           test -f out/posts/index.html
           test -f out/zh/posts/index.html
           test -f out/posts/building-a-personal-worklog/index.html

@@ -7,6 +7,7 @@ test("英文主页、姓名导航与公开资料", async ({ page, isMobile }) =>
   await expect(page.getByRole("heading", { name: "Hi, I'm Ziheng." })).toBeVisible();
   await expect(page.getByText("XR × Embodied AI")).toBeVisible();
   await expect(page.getByText("OpenRDMA", { exact: true })).toBeVisible();
+  await expect(page.locator("#openrdma-preview > a")).toHaveAttribute("href", "https://github.com/open-rdma/open-rdma");
   await expect(page.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", "https://github.com/jzhg6");
   await expect(page.locator(".social-links").getByRole("link", { name: "Email" })).toHaveAttribute("href", "mailto:ziheng830@connect.hku.hk");
   await expect(page.getByText("Google Scholar")).toBeVisible();
@@ -15,7 +16,7 @@ test("英文主页、姓名导航与公开资料", async ({ page, isMobile }) =>
   for (const item of ["Research", "Projects", "Blog", "Repository"]) {
     await expect(nav.getByRole("link", { name: new RegExp(item) })).toBeVisible();
   }
-  await expect(nav.getByRole("link", { name: /Repository/ })).toHaveAttribute("href", "https://github.com/jzhg6");
+  await expect(nav.getByRole("link", { name: /Repository/ })).toHaveAttribute("href", /\/repositories\/?$/);
   await page.getByRole("link", { name: "Ziheng Ji." }).click();
   await expect(page).toHaveURL(/\/$/);
 });
@@ -59,7 +60,20 @@ test("Research 和 Projects 只展示可核实内容", async ({ page }) => {
   await page.goto("/projects/");
   await expect(page.locator("#xr-embodied-ai")).toContainText("in progress");
   await expect(page.locator("#xr-embodied-ai a")).toHaveCount(0);
+  await expect(page.locator("#openrdma h2 a")).toHaveAttribute("href", "https://github.com/open-rdma/open-rdma");
   await expect(page.getByRole("link", { name: /Source code/ })).toHaveAttribute("href", "https://github.com/jzhg6/GraphicalHDL");
+});
+
+test("Repository 页面列出 GitHub 公开仓库", async ({ page }) => {
+  await page.goto("/repositories/");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Repositories");
+  await expect(page.locator(".repo-card")).toHaveCount(7);
+  await expect(page.getByRole("link", { name: "jzhg6.github.io" })).toHaveAttribute("href", "https://github.com/jzhg6/jzhg6.github.io");
+  await expect(page.getByRole("link", { name: "open-rdma" })).toHaveAttribute("href", "https://github.com/jzhg6/open-rdma");
+  await page.getByRole("link", { name: /中文/ }).click();
+  await expect(page).toHaveURL(/\/zh\/repositories\/$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("代码仓库");
+  await expect(page.locator(".repo-card")).toHaveCount(7);
 });
 
 test("OpenRDMA 论文推文在中英文博客中展示且图片可用", async ({ page }) => {
@@ -100,7 +114,7 @@ test("移动菜单可用键盘和触控导航", async ({ page, isMobile }) => {
 
 test("主要页面在 320px 不出现横向溢出", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 800 });
-  for (const path of ["/", "/zh/", "/research/", "/projects/", "/posts/", "/posts/shipping-static-search/", "/zh/posts/shipping-static-search/"]) {
+  for (const path of ["/", "/zh/", "/research/", "/projects/", "/repositories/", "/zh/repositories/", "/posts/", "/posts/shipping-static-search/", "/zh/posts/shipping-static-search/"]) {
     await page.goto(path);
     const size = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, content: document.documentElement.scrollWidth }));
     expect(size.content, `${path} 出现横向溢出`).toBeLessThanOrEqual(size.viewport);
@@ -108,7 +122,7 @@ test("主要页面在 320px 不出现横向溢出", async ({ page }) => {
 });
 
 test("主要页面无严重可访问性问题", async ({ page }) => {
-  for (const path of ["/", "/zh/", "/research/", "/projects/", "/posts/", "/zh/posts/", "/posts/shipping-static-search/"]) {
+  for (const path of ["/", "/zh/", "/research/", "/projects/", "/repositories/", "/zh/repositories/", "/posts/", "/zh/posts/", "/posts/shipping-static-search/"]) {
     await page.goto(path);
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations.filter((v) => v.impact === "serious" || v.impact === "critical"), `${path} 可访问性问题`).toEqual([]);

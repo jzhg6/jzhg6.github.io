@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -12,6 +12,7 @@ const sections = [
   { path: "/research", key: "research" },
   { path: "/projects", key: "projects" },
   { path: "/posts", key: "blog" },
+  { path: "/repositories", key: "repository" },
 ] as const;
 
 function LanguageLink({ locale }: { locale: Locale }) {
@@ -56,9 +57,6 @@ export function SiteHeader({ locale }: { locale: Locale }) {
         </Link>
         <nav className="desktop-nav" aria-label={labels.navLabel}>
           {nav}
-          <a href={siteConfig.github} target="_blank" rel="noopener noreferrer" className="external-nav">
-            {labels.nav.repository} <ArrowUpRight aria-hidden="true" />
-          </a>
           <span className="nav-divider" aria-hidden="true" />
           <LanguageLink locale={locale} />
           <ThemeToggle locale={locale} />
@@ -76,9 +74,6 @@ export function SiteHeader({ locale }: { locale: Locale }) {
         <nav className="mobile-nav" id="mobile-navigation" aria-label={labels.navLabel}>
           <div className="site-container mobile-nav-inner">
             {nav}
-            <a href={siteConfig.github} target="_blank" rel="noopener noreferrer">
-              {labels.nav.repository} <ArrowUpRight aria-hidden="true" />
-            </a>
           </div>
         </nav>
       )}

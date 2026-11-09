@@ -43,14 +43,14 @@ export async function HomeContent({ locale }: { locale: Locale }) {
             </div>
           </article>
           <article className="project-card" id="openrdma-preview">
-            <Link href={localizedPath(locale, "/projects#openrdma")}>
+            <a href={siteConfig.openRdmaRepo} target="_blank" rel="noopener noreferrer">
               <div className="project-visual" aria-hidden="true"><Network /></div>
               <div className="project-details">
                 <h3>OpenRDMA <ArrowUpRight aria-hidden="true" /></h3>
                 <span>RDMA · FPGA · Networking</span>
                 <p>{labels.projects.rdmaDescription}</p>
               </div>
-            </Link>
+            </a>
           </article>
         </div>
       </section>

@@ -40,8 +40,9 @@ jobs:
           test -f out/zh/repositories/index.html
           test -f out/posts/index.html
           test -f out/zh/posts/index.html
-          test -f out/posts/building-a-personal-worklog/index.html
-          test -f out/zh/posts/building-a-personal-worklog/index.html
+          test -f out/posts/openrdma-paper-release/index.html
+          test -f out/zh/posts/openrdma-paper-release/index.html
+          test ! -f out/posts/building-a-personal-worklog/index.html
           test -f out/feed.xml
           test -f out/rss.xml
           test -f out/sitemap.xml

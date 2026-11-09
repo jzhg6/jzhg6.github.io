@@ -8,8 +8,8 @@ import { formatDate } from "@/lib/dates";
 
 describe("双语站点", () => {
   it("英文使用根路径，中文保留同一文章 slug", () => {
-    expect(localizedPath("en", "/posts/rdma-reading-notes")).toBe("/posts/rdma-reading-notes");
-    expect(localizedPath("zh", "/posts/rdma-reading-notes")).toBe("/zh/posts/rdma-reading-notes");
+    expect(localizedPath("en", "/posts/openrdma-paper-release")).toBe("/posts/openrdma-paper-release");
+    expect(localizedPath("zh", "/posts/openrdma-paper-release")).toBe("/zh/posts/openrdma-paper-release");
     expect(localizedPath("zh")).toBe("/zh/");
     expect(otherLocale("en")).toBe("zh");
     expect(t("en").nav.research).toBe("Research");

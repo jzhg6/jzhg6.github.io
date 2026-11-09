@@ -7,7 +7,7 @@
 
 ## 构建与托管
 
-[deploy.yml](.github/workflows/deploy.yml) 使用 Node.js 22.23.1 执行 `npm ci` 和 `npm run check`（ESLint、TypeScript、Vitest、Next.js 构建），再将 `out/` 作为 Pages artifact 发布。`next.config.ts` 使用 `output: "export"` 和 `trailingSlash: true`。英文首选页面在 `/`、`/research/`、`/projects/`、`/posts/`，中文对应页面在 `/zh/` 下；六篇现有文章均有同 slug 的英文译稿。搜索与筛选在浏览器内运行，不依赖后端。
+[deploy.yml](.github/workflows/deploy.yml) 使用 Node.js 22.23.1 执行 `npm ci` 和 `npm run check`（ESLint、TypeScript、Vitest、Next.js 构建），再将 `out/` 作为 Pages artifact 发布。`next.config.ts` 使用 `output: "export"` 和 `trailingSlash: true`。英文首选页面在 `/`、`/research/`、`/projects/`、`/posts/`，中文对应页面在 `/zh/` 下；现有文章均有同 slug 的英文译稿。搜索与筛选在浏览器内运行，不依赖后端。
 
 工作流把 `NEXT_PUBLIC_SITE_URL` 设为 `https://jzhg6.github.io`，用于 canonical、Open Graph、RSS 和 sitemap。无需域名、服务器、Cloudflare 或部署密钥。首次部署需在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**；如果已经由 API 启用，则无需再次操作。部署状态见仓库 **Actions** 页或 **Settings → Pages**。
 

@@ -22,33 +22,33 @@ test("英文主页、姓名导航与公开资料", async ({ page, isMobile }) =>
 });
 
 test("语言切换保持页面与文章 slug，正文完整翻译", async ({ page }) => {
-  await page.goto("/posts/rdma-reading-notes/");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Revisiting RDMA Retransmission Boundaries");
+  await page.goto("/posts/openrdma-paper-release/");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("OpenRDMA Paper Release");
   await page.getByRole("link", { name: "切换到中文" }).click();
-  await expect(page).toHaveURL(/\/zh\/posts\/rdma-reading-notes\/$/);
+  await expect(page).toHaveURL(/\/zh\/posts\/openrdma-paper-release\/$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "zh-CN");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("RDMA 重传边界");
-  await expect(page.locator(".prose")).toContainText("PSN 只解决了一部分问题");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("OpenRDMA 论文发布");
+  await expect(page.locator(".prose")).toContainText("8 字节 Doorbell");
   await page.getByRole("link", { name: "Switch to English" }).click();
-  await expect(page).toHaveURL(/\/posts\/rdma-reading-notes\/$/);
-  await expect(page.locator(".prose")).toContainText("PSN answers only part of the question");
+  await expect(page).toHaveURL(/\/posts\/openrdma-paper-release\/$/);
+  await expect(page.locator(".prose")).toContainText("8-byte doorbell");
 });
 
 test("两种语言的筛选 URL 均可分享并保持独立搜索", async ({ page }) => {
   await page.goto("/posts/");
   const search = page.getByRole("searchbox", { name: /Search titles/ });
-  await search.fill("PSN");
-  await expect(page).toHaveURL(/q=PSN/);
+  await search.fill("OpenRDMA");
+  await expect(page).toHaveURL(/q=OpenRDMA/);
   await expect(page.getByTestId("post-row")).toHaveCount(1);
   await page.reload();
-  await expect(search).toHaveValue("PSN");
+  await expect(search).toHaveValue("OpenRDMA");
   await page.getByRole("link", { name: "切换到中文" }).click();
-  await expect(page).toHaveURL(/\/zh\/posts\/\?q=PSN/);
+  await expect(page).toHaveURL(/\/zh\/posts\/\?q=OpenRDMA/);
   await expect(page.locator("html")).toHaveAttribute("lang", "zh-CN");
   await expect(page.getByTestId("post-row")).toHaveCount(1);
   await page.getByRole("button", { name: "清除全部" }).click();
   await expect(page).toHaveURL(/\/zh\/posts\/$/);
-  await page.getByRole("searchbox", { name: /搜索文章/ }).fill("PSN 重传");
+  await page.getByRole("searchbox", { name: /搜索文章/ }).fill("门铃");
   await expect(page.getByTestId("post-row")).toHaveCount(1);
 });
 
@@ -67,13 +67,14 @@ test("Research 和 Projects 只展示可核实内容", async ({ page }) => {
 test("Repository 页面列出 GitHub 公开仓库", async ({ page }) => {
   await page.goto("/repositories/");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Repositories");
-  await expect(page.locator(".repo-card")).toHaveCount(7);
-  await expect(page.getByRole("link", { name: "jzhg6.github.io" })).toHaveAttribute("href", "https://github.com/jzhg6/jzhg6.github.io");
-  await expect(page.getByRole("link", { name: "open-rdma" })).toHaveAttribute("href", "https://github.com/jzhg6/open-rdma");
+  await expect(page.locator(".repo-card")).toHaveCount(5);
+  await expect(page.getByRole("link", { name: "jzhg6.github.io" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "open-rdma", exact: true })).toHaveAttribute("href", "https://github.com/open-rdma/open-rdma");
+  await expect(page.getByRole("link", { name: "open-rdma-rtl" })).toHaveAttribute("href", "https://github.com/open-rdma/open-rdma-rtl");
   await page.getByRole("link", { name: /中文/ }).click();
   await expect(page).toHaveURL(/\/zh\/repositories\/$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("代码仓库");
-  await expect(page.locator(".repo-card")).toHaveCount(7);
+  await expect(page.locator(".repo-card")).toHaveCount(5);
 });
 
 test("OpenRDMA 论文推文在中英文博客中展示且图片可用", async ({ page }) => {
@@ -114,7 +115,7 @@ test("移动菜单可用键盘和触控导航", async ({ page, isMobile }) => {
 
 test("主要页面在 320px 不出现横向溢出", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 800 });
-  for (const path of ["/", "/zh/", "/research/", "/projects/", "/repositories/", "/zh/repositories/", "/posts/", "/posts/shipping-static-search/", "/zh/posts/shipping-static-search/"]) {
+  for (const path of ["/", "/zh/", "/research/", "/projects/", "/repositories/", "/zh/repositories/", "/posts/", "/posts/openrdma-paper-release/", "/zh/posts/openrdma-paper-release/"]) {
     await page.goto(path);
     const size = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, content: document.documentElement.scrollWidth }));
     expect(size.content, `${path} 出现横向溢出`).toBeLessThanOrEqual(size.viewport);
@@ -122,7 +123,7 @@ test("主要页面在 320px 不出现横向溢出", async ({ page }) => {
 });
 
 test("主要页面无严重可访问性问题", async ({ page }) => {
-  for (const path of ["/", "/zh/", "/research/", "/projects/", "/repositories/", "/zh/repositories/", "/posts/", "/zh/posts/", "/posts/shipping-static-search/"]) {
+  for (const path of ["/", "/zh/", "/research/", "/projects/", "/repositories/", "/zh/repositories/", "/posts/", "/zh/posts/", "/posts/openrdma-paper-release/"]) {
     await page.goto(path);
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations.filter((v) => v.impact === "serious" || v.impact === "critical"), `${path} 可访问性问题`).toEqual([]);
@@ -136,9 +137,9 @@ test("两种语言的 RSS、sitemap 与 SEO 可访问", async ({ request, page }
   }
   const en = await (await request.get("/feed.xml")).text();
   const zh = await (await request.get("/rss.xml")).text();
-  expect(en).toContain("Revisiting RDMA Retransmission Boundaries");
-  expect(zh).toContain("从可靠传输角度重读 RDMA 重传边界");
-  await page.goto("/posts/rdma-reading-notes/");
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://jzhg6.github.io/posts/rdma-reading-notes/");
-  await expect(page.locator('link[hreflang="zh-CN"]')).toHaveAttribute("href", "https://jzhg6.github.io/zh/posts/rdma-reading-notes/");
+  expect(en).toContain("OpenRDMA Paper Release");
+  expect(zh).toContain("OpenRDMA 论文发布");
+  await page.goto("/posts/openrdma-paper-release/");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://jzhg6.github.io/posts/openrdma-paper-release/");
+  await expect(page.locator('link[hreflang="zh-CN"]')).toHaveAttribute("href", "https://jzhg6.github.io/zh/posts/openrdma-paper-release/");
 });

@@ -1,6 +1,6 @@
 # Ziheng Ji — Research, Projects, Blog
 
-以英文为首选语言的中英双语个人主页，包含 Research、Projects、Blog 和 Repository 入口。姓名即主页导航；主页展示具身智能研究方向、精选项目和最近写作。Blog 保留原有 Markdown 内容、全文搜索与组合筛选。
+以英文为首选语言的中英双语个人主页，包含 Research、Projects、Blog 和 Repository 入口。姓名即主页导航；主页展示具身智能研究方向、精选项目和最近写作。Blog 提供全文搜索与组合筛选。
 
 ## 本地运行
 
@@ -18,7 +18,7 @@ npm run dev
 - [site.ts](src/config/site.ts)：真实姓名、邮箱、GitHub、论文和项目链接；更改链接时核实公开来源。
 - [i18n.ts](src/config/i18n.ts)：英文与中文的页面文案和导航。
 - [taxonomy.ts](src/config/taxonomy.ts)：文章类型及分类的双语名称。
-- `content/posts/<slug>.md`：原有中文正文；`content/posts/en/<slug>.md`：对应的英文译稿。
+- `content/posts/<slug>.md`：中文正文；`content/posts/en/<slug>.md`：对应的英文译稿。
 - Research 中的 OpenRDMA 论文链接为 arXiv 预印本。XR × Embodied AI 暂为「探索中」卡位，不含未经证实的成果或链接。
 - GitHub 和 Email 链接可点击；Google Scholar、LinkedIn、ORCID 和 X 标签显示待补状态，不提供假链接。
 

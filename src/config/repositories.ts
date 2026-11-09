@@ -8,27 +8,18 @@ export interface Repository {
   fork: boolean;
 }
 
-// Snapshot of https://github.com/jzhg6?tab=repositories, captured 2026-11-09.
+// Snapshot of the pinned repositories on https://github.com/jzhg6, captured 2026-11-09.
 export const repositories: Repository[] = [
   {
-    name: "jzhg6.github.io",
-    url: "https://github.com/jzhg6/jzhg6.github.io",
-    description: { en: "Personal worklog and blog.", zh: "个人工作日志与博客。" },
-    language: "TypeScript",
-    stars: 0,
-    forks: 0,
-    fork: false,
-  },
-  {
-    name: "GraphicalHDL",
-    url: "https://github.com/jzhg6/GraphicalHDL",
+    name: "open-rdma",
+    url: "https://github.com/open-rdma/open-rdma",
     description: {
-      en: "A three-layer graphical hardware design compiler that turns architecture JSON into synthesizable SystemVerilog.",
-      zh: "三层图形化硬件设计编译器，将架构图 JSON 生成可综合 SystemVerilog。",
+      en: "The main Open-RDMA project repository: introduction, getting-started guide, new events, and more.",
+      zh: "Open-RDMA 项目主仓库：项目介绍、上手指南、最新活动与更多内容。",
     },
-    language: "TypeScript",
-    stars: 1,
-    forks: 0,
+    language: "HTML",
+    stars: 396,
+    forks: 54,
     fork: false,
   },
   {
@@ -40,6 +31,15 @@ export const repositories: Repository[] = [
     },
     language: "TypeScript",
     stars: 3,
+    forks: 0,
+    fork: false,
+  },
+  {
+    name: "ai-website-cloner",
+    url: "https://github.com/jzhg6/ai-website-cloner",
+    description: { en: null, zh: null },
+    language: "TypeScript",
+    stars: 1,
     forks: 0,
     fork: false,
   },
@@ -56,33 +56,12 @@ export const repositories: Repository[] = [
     fork: false,
   },
   {
-    name: "ai-website-cloner",
-    url: "https://github.com/jzhg6/ai-website-cloner",
+    name: "open-rdma-rtl",
+    url: "https://github.com/open-rdma/open-rdma-rtl",
     description: { en: null, zh: null },
-    language: "TypeScript",
-    stars: 1,
-    forks: 0,
+    language: "Python",
+    stars: 25,
+    forks: 10,
     fork: false,
-  },
-  {
-    name: "open-rdma",
-    url: "https://github.com/jzhg6/open-rdma",
-    description: {
-      en: "The main Open-RDMA project repository: introduction, getting-started guide, new events, and more.",
-      zh: "Open-RDMA 项目主仓库：项目介绍、上手指南、最新活动与更多内容。",
-    },
-    language: null,
-    stars: 1,
-    forks: 0,
-    fork: true,
-  },
-  {
-    name: "Tutorial_2022",
-    url: "https://github.com/jzhg6/Tutorial_2022",
-    description: { en: null, zh: null },
-    language: null,
-    stars: 0,
-    forks: 0,
-    fork: true,
   },
 ];
